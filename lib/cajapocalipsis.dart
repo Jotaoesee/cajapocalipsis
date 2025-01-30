@@ -27,7 +27,7 @@ class Cajapocalipsis extends Forge2DGame with TapDetector {
     for (int i = 0; i < 5; i++) {
       final double x = random.nextDouble() * (size.x - 10) + 5;
       final double y = random.nextDouble() * (size.y / 3);
-      add(Caja(Vector2(x, y), Vector2(4, 4)));
+      add(Caja(Vector2(x, y), Vector2(100, 100)));
     }
 
     // 📌 Posición corregida para que la pelota sea visible

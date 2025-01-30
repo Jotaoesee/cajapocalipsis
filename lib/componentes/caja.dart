@@ -1,3 +1,4 @@
+import 'package:flame/components.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
 /// Caja que se puede derribar
@@ -5,12 +6,22 @@ class Caja extends BodyComponent {
   final Vector2 tamanio;
   final Vector2 posicion;
 
-  Caja(this.posicion, this.tamanio) : super();
+  Caja(this.posicion, this.tamanio);
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad(); // Esperar a que el cuerpo se cree
-    renderBody = true;
+    await super.onLoad();
+
+    final game = findGame() as Forge2DGame;
+
+    // Cargar la imagen manualmente como Sprite
+    final sprite = await Sprite.load('caja.png');
+
+    add(SpriteComponent(
+      sprite: sprite, // Usar Sprite directamente
+      size: tamanio,
+      anchor: Anchor.center,
+    ));
   }
 
   @override
