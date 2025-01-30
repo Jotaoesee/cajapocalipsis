@@ -1,17 +1,17 @@
 import 'dart:math';
 import 'package:cajapocalipsis/componentes/fondo.dart';
+import 'package:cajapocalipsis/componentes/lanzador.dart';
 import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'componentes/suelo.dart';
 import 'componentes/caja.dart';
-import 'componentes/pelota.dart';
 
 /// Clase principal del juego
 class Cajapocalipsis extends Forge2DGame with TapDetector {
   Cajapocalipsis() : super(gravity: Vector2(0, 10));
 
   final Random random = Random();
-  late Pelota pelota;
+  late Lanzador lanzador;
 
   @override
   Future<void> onLoad() async {
@@ -30,14 +30,13 @@ class Cajapocalipsis extends Forge2DGame with TapDetector {
       add(Caja(Vector2(x, y), Vector2(100, 100)));
     }
 
-    // 📌 Posición corregida para que la pelota sea visible
-    pelota = Pelota(Vector2(size.x / 2, size.y - 200));
-    add(pelota);
+    //Definir la posición del lanzador en la parte baja de la pantalla
+    final posicionLanzador =
+        Vector2(size.x / 2, size.y - 100); // 📌 Subirlo un poco
+    lanzador = Lanzador(posicionLanzador);
+    add(lanzador);
   }
 
   @override
-  void onTap() {
-    print("Lanzando pelota");
-    pelota.lanzar(Vector2(15, -20));
-  }
+  void onTap() {}
 }
