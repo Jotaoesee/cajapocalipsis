@@ -2,16 +2,22 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 
 /// Caja que se puede derribar
 class Caja extends BodyComponent {
-  final Vector2 tamanio; // Tamaño de la caja
-  final Vector2 posicion; // Posición inicial de la caja
+  final Vector2 tamanio;
+  final Vector2 posicion;
 
-  Caja(this.posicion, this.tamanio);
+  Caja(this.posicion, this.tamanio) : super();
+
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad(); // Esperar a que el cuerpo se cree
+    renderBody = true;
+  }
 
   @override
   Body createBody() {
     final definicionCuerpo = BodyDef(
       position: posicion,
-      type: BodyType.dynamic, // La caja se mueve con la física
+      type: BodyType.dynamic,
     );
 
     final body = world.createBody(definicionCuerpo);
