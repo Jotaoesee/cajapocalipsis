@@ -28,7 +28,7 @@ class Cajapocalipsis extends Forge2DGame with TapDetector {
     }
 
     // 📌 Posición corregida para que la pelota sea visible
-    pelota = Pelota(Vector2(size.x / 2, size.y - 10));
+    pelota = Pelota(Vector2(size.x / 2, size.y - 200));
     add(pelota);
   }
 

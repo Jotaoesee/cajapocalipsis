@@ -4,22 +4,24 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 class Pelota extends BodyComponent {
   final Vector2 posicion;
   final double radio;
+  bool haSidoLanzada = false; // Controla si la pelota ya se lanzó
 
-  Pelota(this.posicion, {this.radio = 20}) : super();
+  Pelota(this.posicion, {this.radio = 5});
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    renderBody = true; // Activar el renderizado
-    print(
-        "Pelota creada en posición: $posicion"); // Verificar si la pelota se está agregando
+    renderBody = true;
+    print("Pelota creada en posición: $posicion");
   }
 
   @override
   Body createBody() {
     final definicionCuerpo = BodyDef(
       position: posicion,
-      type: BodyType.dynamic,
+      type: haSidoLanzada
+          ? BodyType.dynamic
+          : BodyType.kinematic, // Inicialmente quieta
     );
 
     final body = world.createBody(definicionCuerpo);
@@ -34,9 +36,11 @@ class Pelota extends BodyComponent {
     return body;
   }
 
-  /// Aplica una fuerza a la pelota para lanzarla
+  /// Lanza la pelota cambiando su tipo a dinámico
   void lanzar(Vector2 fuerza) {
-    if (isMounted) {
+    if (!haSidoLanzada) {
+      haSidoLanzada = true;
+      body.setType(BodyType.dynamic); // Ahora sí es afectada por la gravedad
       body.applyLinearImpulse(fuerza);
     }
   }
