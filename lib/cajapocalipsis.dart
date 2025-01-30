@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:cajapocalipsis/componentes/fondo.dart';
 import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'componentes/suelo.dart';
@@ -15,6 +16,8 @@ class Cajapocalipsis extends Forge2DGame with TapDetector {
   @override
   Future<void> onLoad() async {
     print("Juego Cajapocalipsis cargado con físicas");
+
+    add(Fondo()); // Agregar el fondo primero
 
     // Agregamos el suelo
     final suelo = Suelo(Vector2(size.x, 10));
