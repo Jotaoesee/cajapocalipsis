@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:cajapocalipsis/componentes/dinamita.dart';
 import 'package:cajapocalipsis/componentes/fondo.dart';
 import 'package:cajapocalipsis/componentes/lanzador.dart';
 import 'package:flame/events.dart';
@@ -32,11 +33,18 @@ class Cajapocalipsis extends Forge2DGame with TapDetector {
 
     //Definir la posición del lanzador en la parte baja de la pantalla
     final posicionLanzador =
-        Vector2(size.x / 2, size.y - 100); // 📌 Subirlo un poco
+        Vector2(size.x / 2, size.y - 100); // Subirlo un poco
     lanzador = Lanzador(posicionLanzador);
     add(lanzador);
   }
 
   @override
-  void onTap() {}
+  void onTap() {
+    print("🔥 Lanzando dinamita!");
+
+    // Crear y lanzar la dinamita desde la posición del lanzador
+    final dinamita = Dinamita(lanzador.position);
+    add(dinamita);
+    dinamita.lanzar(Vector2(15, -20)); // Ajusta la fuerza del lanzamiento
+  }
 }
