@@ -1,20 +1,21 @@
 import 'package:flame/components.dart';
-import 'package:flame_forge2d/body_component.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
 /// Suelo del juego donde caerán los objetos
 class Suelo extends BodyComponent {
-  final Vector2 tamanio; // tamanio del suelo
+  final Vector2 tamanio;
 
   Suelo(this.tamanio);
 
   @override
   Future<void> onLoad() async {
+    super.onLoad();
+
     final forma = PolygonShape()..setAsBoxXY(tamanio.x / 2, tamanio.y / 2);
 
     final definicionCuerpo = BodyDef(
-      position: Vector2(tamanio.x / 2, tamanio.y), // Posición en la parte baja
-      type: BodyType.static, // El suelo no se mueve
+      position: Vector2(tamanio.x / 2, tamanio.y + 720), //  Ajustar más abajo
+      type: BodyType.static,
     );
 
     final definicionFixture = FixtureDef(forma)
