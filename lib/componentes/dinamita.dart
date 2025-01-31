@@ -1,26 +1,38 @@
-import 'package:flame/components.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
+import 'package:flame/components.dart';
 
-/// Dinamita que se lanza desde el lanzador
 class Dinamita extends BodyComponent {
   final Vector2 posicion;
-  final Vector2 tamanio;
   final Vector2 _fuerzaInicial;
+  final Vector2 spriteSize; // Tamaño del sprite en píxeles
+  final Vector2 bodySize; // Tamaño del cuerpo de física en unidades de física
+
   late Body _body;
 
-  Dinamita(this.posicion, this._fuerzaInicial, {Vector2? tamanio})
-      : tamanio = tamanio ?? Vector2(20, 40);
+  // Constructor con tamaños separados
+  Dinamita(
+    this.posicion,
+    this._fuerzaInicial, {
+    Vector2? spriteSize,
+    Vector2? bodySize,
+  })  : spriteSize =
+            spriteSize ?? Vector2(120, 160), // Tamaño por defecto del sprite
+        bodySize = bodySize ??
+            Vector2(40, 60); // Tamaño por defecto del cuerpo de física
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
 
+    // Cargar el sprite de la dinamita
     final sprite = await Sprite.load('dinamita.png');
 
+    // Agregar el SpriteComponent con el tamaño definido
     add(SpriteComponent(
       sprite: sprite,
-      size: tamanio,
-      anchor: Anchor.center,
+      size: spriteSize,
+      anchor: Anchor.center, // Centrar el sprite
+      position: Vector2.zero(),
     ));
 
     print("💣 Dinamita creada en: $posicion");
@@ -28,6 +40,7 @@ class Dinamita extends BodyComponent {
 
   @override
   Body createBody() {
+    // Definir el cuerpo de física con la posición ajustada
     final bodyDef = BodyDef(
       position: posicion,
       type: BodyType.dynamic,
@@ -37,7 +50,9 @@ class Dinamita extends BodyComponent {
 
     _body = world.createBody(bodyDef);
 
-    final shape = PolygonShape()..setAsBoxXY(tamanio.x / 2, tamanio.y / 2);
+    // Definir una forma rectangular más estrecha para el cuerpo de física
+    final shape = PolygonShape()..setAsBoxXY(bodySize.x / 2, bodySize.y / 2);
+
     final fixtureDef = FixtureDef(shape)
       ..density = 2.0
       ..friction = 0.3
@@ -46,6 +61,7 @@ class Dinamita extends BodyComponent {
 
     _body.createFixture(fixtureDef);
 
+    // Aplicar impulso después de una breve demora
     Future.delayed(Duration(milliseconds: 100), () {
       if (_body != null) {
         final Vector2 impulso = _fuerzaInicial * _body.mass;
