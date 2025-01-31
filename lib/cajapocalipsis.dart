@@ -40,11 +40,15 @@ class Cajapocalipsis extends Forge2DGame with TapDetector {
 
   @override
   void onTap() {
-    print("🔥 Lanzando dinamita!");
+    print("🔥 Creando dinamita...");
 
-    // Crear y lanzar la dinamita desde la posición del lanzador
+    //  Crear la dinamita pero no lanzarla inmediatamente
     final dinamita = Dinamita(lanzador.position);
     add(dinamita);
-    dinamita.lanzar(Vector2(15, -20)); // Ajusta la fuerza del lanzamiento
+
+    //  Esperar un frame para asegurar que el cuerpo se cree
+    Future.delayed(Duration(milliseconds: 100), () {
+      dinamita.lanzar(Vector2(15, -20));
+    });
   }
 }
