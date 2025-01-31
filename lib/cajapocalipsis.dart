@@ -40,7 +40,12 @@ class Cajapocalipsis extends Forge2DGame with TapDetector {
 
   @override
   void onTapDown(TapDownInfo info) {
-    final Vector2 puntoObjetivo = info.eventPosition.global; // ✅ Correcto
+    final Vector2 puntoObjetivo = info.eventPosition.global;
     print("🎯 Click detectado en: $puntoObjetivo");
+
+    // 📌 Crear dinamita donde hizo clic el jugador
+    final dinamita = Dinamita(puntoObjetivo);
+    add(dinamita);
+    print("💣 Dinamita creada en: $puntoObjetivo");
   }
 }
