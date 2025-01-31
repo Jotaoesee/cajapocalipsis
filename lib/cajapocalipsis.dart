@@ -22,7 +22,7 @@ class Cajapocalipsis extends Forge2DGame with TapDetector {
 
     // Agregamos el suelo
     final suelo = Suelo(Vector2(size.x, 10));
-    add(suelo);
+    await add(suelo); // 🔥 Asegurar que se añada correctamente
 
     // Generamos cajas en posiciones aleatorias
     for (int i = 0; i < 5; i++) {
@@ -31,9 +31,7 @@ class Cajapocalipsis extends Forge2DGame with TapDetector {
       add(Caja(Vector2(x, y), Vector2(100, 100)));
     }
 
-    //Definir la posición del lanzador en la parte baja de la pantalla
-    final posicionLanzador =
-        Vector2(size.x / 2, size.y - 100); // Subirlo un poco
+    final posicionLanzador = Vector2(size.x / 2, size.y - 100);
     lanzador = Lanzador(posicionLanzador);
     add(lanzador);
   }
@@ -43,9 +41,17 @@ class Cajapocalipsis extends Forge2DGame with TapDetector {
     final Vector2 puntoObjetivo = info.eventPosition.global;
     print("🎯 Click detectado en: $puntoObjetivo");
 
-    // 📌 Crear dinamita donde hizo clic el jugador
-    final dinamita = Dinamita(puntoObjetivo);
+    // 📌 Calcular dirección normalizada desde el lanzador
+    Vector2 direccion = puntoObjetivo - lanzador.position;
+    if (direccion.length > 0) {
+      direccion.normalize();
+    }
+
+    // 📌 Aplicamos un impulso más fuerte
+    final Vector2 fuerza = direccion * 80000; // Ajuste de fuerza
+
+    // 📌 Crear dinamita en la posición del lanzador y lanzarla
+    final dinamita = Dinamita(lanzador.position, fuerza);
     add(dinamita);
-    print("💣 Dinamita creada en: $puntoObjetivo");
   }
 }

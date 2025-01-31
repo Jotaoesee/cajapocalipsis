@@ -5,17 +5,15 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 class Dinamita extends BodyComponent {
   final Vector2 posicion;
   final Vector2 tamanio;
-  late Body
-      _body; //  Se asegurará de que el cuerpo se inicialice antes de usarlo
+  final Vector2 _fuerzaInicial;
+  late Body _body;
 
-  Dinamita(this.posicion, {Vector2? tamanio})
+  Dinamita(this.posicion, this._fuerzaInicial, {Vector2? tamanio})
       : tamanio = tamanio ?? Vector2(20, 40);
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-
-    final game = findGame() as Forge2DGame;
 
     final sprite = await Sprite.load('dinamita.png');
 
@@ -24,6 +22,8 @@ class Dinamita extends BodyComponent {
       size: tamanio,
       anchor: Anchor.center,
     ));
+
+    print("💣 Dinamita creada en: $posicion");
   }
 
   @override
@@ -31,27 +31,32 @@ class Dinamita extends BodyComponent {
     final bodyDef = BodyDef(
       position: posicion,
       type: BodyType.dynamic,
+      linearDamping: 0.1, // 📌 Reducimos resistencia del aire
+      angularDamping: 0.5, // 📌 Evita que la dinamita gire demasiado
     );
 
-    _body = world.createBody(bodyDef); // 📌 Guardamos el cuerpo en _body
+    _body = world.createBody(bodyDef);
 
     final shape = PolygonShape()..setAsBoxXY(tamanio.x / 2, tamanio.y / 2);
     final fixtureDef = FixtureDef(shape)
-      ..density = 1.0
+      ..density = 2.0 // 📌 Ajustar la densidad para mejorar el impulso
       ..friction = 0.3
-      ..restitution = 0.2;
+      ..restitution = 0.1;
 
     _body.createFixture(fixtureDef);
-    return _body;
-  }
 
-  /// 📌 Método seguro para lanzar la dinamita
-  void lanzar(Vector2 fuerza) {
-    if (!isMounted || _body == null) {
-      print("❌ Intentando lanzar antes de que el cuerpo esté listo");
-      return;
-    }
-    print("💥 Lanzando dinamita con fuerza: $fuerza");
-    _body.applyLinearImpulse(fuerza);
+    // 📌 Aplicamos el impulso después de asegurarnos de que el cuerpo está listo
+    Future.delayed(Duration(milliseconds: 100), () {
+      if (_body != null) {
+        final Vector2 impulso =
+            _fuerzaInicial * _body.mass; // 📌 Ajuste de impulso
+        print("💥 Lanzando dinamita con fuerza: $impulso");
+        _body.applyLinearImpulse(impulso);
+      } else {
+        print("❌ Error: El cuerpo de la dinamita aún no está listo");
+      }
+    });
+
+    return _body;
   }
 }

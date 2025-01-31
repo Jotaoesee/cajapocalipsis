@@ -5,14 +5,17 @@ class Suelo extends BodyComponent {
   final Vector2 tamanio;
 
   Suelo(this.tamanio) {
-    renderBody = false; //  Hace que el suelo NO se renderice visualmente
+    print("🛠️ Creando suelo con tamaño: $tamanio");
+    renderBody = false;
   }
 
   @override
   Body createBody() {
+    print(
+        "✅ Creando cuerpo del suelo en: ${tamanio.x / 2}, ${tamanio.y + 520}");
+
     final definicionCuerpo = BodyDef(
-      position:
-          Vector2(tamanio.x / 2, tamanio.y + 720), // Mantener ajuste manual
+      position: Vector2(tamanio.x / 2, tamanio.y + 720),
       type: BodyType.static,
     );
 
@@ -25,6 +28,9 @@ class Suelo extends BodyComponent {
       ..restitution = 0.1;
 
     body.createFixture(definicionFixture);
+
+    print(
+        "✅ Suelo creado en Forge2D en posición: ${definicionCuerpo.position}");
     return body;
   }
 }
