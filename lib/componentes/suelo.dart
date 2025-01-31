@@ -12,7 +12,7 @@ class Suelo extends BodyComponent {
   @override
   Body createBody() {
     print(
-        "✅ Creando cuerpo del suelo en: ${tamanio.x / 2}, ${tamanio.y + 520}");
+        "✅ Creando cuerpo del suelo en: ${tamanio.x / 2}, ${tamanio.y + 720}");
 
     final definicionCuerpo = BodyDef(
       position: Vector2(tamanio.x / 2, tamanio.y + 720),
@@ -25,7 +25,8 @@ class Suelo extends BodyComponent {
     final definicionFixture = FixtureDef(forma)
       ..density = 1.0
       ..friction = 0.5
-      ..restitution = 0.1;
+      ..restitution = 0.1
+      ..filter.categoryBits = 0x0002;
 
     body.createFixture(definicionFixture);
 

@@ -16,7 +16,7 @@ class Caja extends BodyComponent {
 
     final game = findGame() as Forge2DGame;
 
-    // 📌 Cargar la imagen con transparencia
+    //  Cargar la imagen con transparencia
     final sprite = await Sprite.load('caja.png');
 
     print("✅ Imagen de la caja cargada con transparencia: ${sprite.srcSize}");
@@ -26,8 +26,8 @@ class Caja extends BodyComponent {
       size: Vector2(118, 118),
       anchor: Anchor.center,
       paint: Paint()
-        ..color = const Color(0xFFFFFFFF) // 📌 Asegurar transparencia
-        ..blendMode = BlendMode.srcATop, // 📌 Probar modos de transparencia
+        ..color = const Color(0xFFFFFFFF)
+        ..blendMode = BlendMode.srcATop,
     ));
   }
 

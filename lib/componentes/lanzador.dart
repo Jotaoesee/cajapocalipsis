@@ -16,8 +16,7 @@ class Lanzador extends PositionComponent {
 
       add(SpriteComponent(
         sprite: sprite,
-        size:
-            Vector2(200, 200), // 📌 Aumentar tamaño temporalmente para pruebas
+        size: Vector2(200, 200), //  Aumentar tamaño temporalmente para pruebas
         anchor: Anchor.center,
       ));
     } catch (e) {
