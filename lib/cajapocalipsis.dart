@@ -41,17 +41,23 @@ class Cajapocalipsis extends Forge2DGame with TapDetector {
     final Vector2 puntoObjetivo = info.eventPosition.global;
     print("🎯 Click detectado en: $puntoObjetivo");
 
-    //  Calcular dirección normalizada desde el lanzador
+    // Calcular dirección normalizada desde el lanzador
     Vector2 direccion = puntoObjetivo - lanzador.position;
     if (direccion.length > 0) {
       direccion.normalize();
     }
 
-    //  Aplicamos un impulso más fuerte
+    // Aplicar un impulso más fuerte
     final Vector2 fuerza = direccion * 80000; // Ajuste de fuerza
 
-    //  Crear dinamita en la posición del lanzador y lanzarla
-    final dinamita = Dinamita(lanzador.position, fuerza);
+    // Definir un desplazamiento relativo para la posición de spawn
+    final Vector2 desplazamiento = Vector2(100, -120);
+
+    // Calcular la nueva posición de spawn
+    final Vector2 nuevaPosicion = lanzador.position + desplazamiento;
+
+    // Crear dinamita en la nueva posición y lanzarla
+    final dinamita = Dinamita(nuevaPosicion, fuerza);
     add(dinamita);
   }
 }
