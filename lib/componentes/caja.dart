@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flame/components.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
@@ -14,13 +16,18 @@ class Caja extends BodyComponent {
 
     final game = findGame() as Forge2DGame;
 
-    // Cargar la imagen manualmente como Sprite
+    // 📌 Cargar la imagen con transparencia
     final sprite = await Sprite.load('caja.png');
 
+    print("✅ Imagen de la caja cargada con transparencia: ${sprite.srcSize}");
+
     add(SpriteComponent(
-      sprite: sprite, // Usar Sprite directamente
-      size: tamanio,
+      sprite: sprite,
+      size: Vector2(118, 118),
       anchor: Anchor.center,
+      paint: Paint()
+        ..color = const Color(0xFFFFFFFF) // 📌 Asegurar transparencia
+        ..blendMode = BlendMode.srcATop, // 📌 Probar modos de transparencia
     ));
   }
 
