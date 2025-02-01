@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:cajapocalipsis/cajapocalipsis.dart'; // Asegúrate de que la ruta es correcta
+import 'package:cajapocalipsis/cajapocalipsis.dart';
 import 'package:flame_audio/flame_audio.dart';
 
+/// Overlay del menú principal del juego.
 class MenuOverlay extends StatelessWidget {
   final Cajapocalipsis juego;
 
@@ -10,18 +11,17 @@ class MenuOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      // Contenedor principal con la imagen de fondo
       child: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/images/fondo_overlay.png'),
-            fit: BoxFit.cover,
+            fit: BoxFit.cover, // Ajusta la imagen al fondo de la pantalla.
           ),
         ),
-        // Capa semitransparente para mejorar la legibilidad
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.6),
+            color: Colors.black.withOpacity(
+                0.6), // Capa oscura semitransparente para mejor legibilidad.
           ),
           child: Center(
             child: Padding(
@@ -40,8 +40,8 @@ class MenuOverlay extends StatelessWidget {
                   SizedBox(height: 20),
                   Text(
                     '¡Bienvenido a Cajapocalipsis!\n\n'
-                    'En este juego, deberás destruir cajas lanzando dinamita. '
-                    'Prepárate para una explosiva aventura en un entorno apocalíptico.',
+                    'Destruye todas las cajas lanzando dinamita. '
+                    'Prepárate para una explosiva aventura en un mundo apocalíptico.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 24,
@@ -51,15 +51,14 @@ class MenuOverlay extends StatelessWidget {
                   SizedBox(height: 40),
                   ElevatedButton(
                     onPressed: () {
-                      // Iniciar la música de fondo en el momento en que se presione el botón.
+                      // Inicia la música de fondo cuando el jugador presiona "Iniciar Juego".
                       FlameAudio.bgm.initialize();
                       FlameAudio.bgm.play('musica_fondo.mp3', volume: 0.5);
                       print("🎵 Música de fondo iniciada");
 
-                      // Quitar el overlay para iniciar el juego.
+                      // Oculta el overlay para comenzar la partida.
                       juego.overlays.remove('MenuOverlay');
                     },
-                    child: Text('Iniciar Juego'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
                       foregroundColor: Colors.white,
@@ -70,6 +69,7 @@ class MenuOverlay extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+                    child: Text('Iniciar Juego'),
                   ),
                 ],
               ),
