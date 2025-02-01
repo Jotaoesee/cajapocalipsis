@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:cajapocalipsis/overlays/contador_tiempo.dart';
 import 'package:cajapocalipsis/overlays/texto_puntuacion.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flame/events.dart';
@@ -36,7 +37,9 @@ class Cajapocalipsis extends Forge2DGame with TapDetector {
     lanzador = Lanzador(posicionLanzador);
     add(lanzador);
 
-    // Asegúrate de que el nombre del componente de texto coincide con el de su clase
+    // Agregar el contador de tiempo en la esquina superior derecha
+    add(ContadorTiempo());
+
     add(TextoPuntuacion());
   }
 
