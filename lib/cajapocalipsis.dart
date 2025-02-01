@@ -1,12 +1,13 @@
 import 'dart:math';
-import 'package:cajapocalipsis/componentes/dinamita.dart';
-import 'package:cajapocalipsis/componentes/fondo.dart';
-import 'package:cajapocalipsis/componentes/lanzador.dart';
+import 'package:cajapocalipsis/overlays/texto_puntuacion.dart';
+import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flame/events.dart';
 import 'package:flame_audio/flame_audio.dart';
-import 'package:flame_forge2d/flame_forge2d.dart';
+import 'componentes/fondo.dart';
 import 'componentes/suelo.dart';
 import 'componentes/caja.dart';
+import 'componentes/lanzador.dart';
+import 'componentes/dinamita.dart';
 
 /// Clase principal del juego
 class Cajapocalipsis extends Forge2DGame with TapDetector {
@@ -14,56 +15,49 @@ class Cajapocalipsis extends Forge2DGame with TapDetector {
 
   final Random aleatorio = Random();
   late Lanzador lanzador;
+  int puntuacion = 0; // Puntuación inicial
 
   @override
   Future<void> onLoad() async {
     print("Juego Cajapocalipsis cargado con físicas");
 
-    // Agregar el fondo
     add(Fondo());
 
-    // Agregar el suelo
     final suelo = Suelo(Vector2(size.x, 10));
     await add(suelo);
 
-    // Generar cajas en posiciones aleatorias
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 10; i++) {
       final double x = aleatorio.nextDouble() * (size.x - 10) + 5;
       final double y = aleatorio.nextDouble() * (size.y / 3);
       add(Caja(Vector2(x, y), Vector2(100, 100)));
     }
 
-    // Agregar el lanzador en la posición deseada
     final posicionLanzador = Vector2(size.x / 2, size.y - 100);
     lanzador = Lanzador(posicionLanzador);
     add(lanzador);
+
+    // Asegúrate de que el nombre del componente de texto coincide con el de su clase
+    add(TextoPuntuacion());
   }
 
   @override
   void onTapDown(TapDownInfo info) {
-    // Reproducir el efecto de sonido del lanzador al disparar
-    FlameAudio.play('disparo_lanzador.mp3');
+    FlameAudio.play('assets/audio/disparo_lanzador.mp3');
 
     final Vector2 puntoObjetivo = info.eventPosition.global;
     print("🎯 Click detectado en: $puntoObjetivo");
 
-    // Calcular la dirección normalizada desde el lanzador hacia el punto de toque
     Vector2 direccion = puntoObjetivo - lanzador.position;
     if (direccion.length > 0) {
       direccion.normalize();
     }
 
-    // Aplicar un impulso (fuerza) mayor en la dirección calculada
     final Vector2 fuerza = direccion * 800000;
-
-    // Definir un desplazamiento relativo para la posición de aparición del dinamita
     final Vector2 desplazamiento = Vector2(100, -120);
-
-    // Calcular la nueva posición de aparición
     final Vector2 nuevaPosicion = lanzador.position + desplazamiento;
-
-    // Crear dinamita en la nueva posición y lanzarla
     final dinamita = Dinamita(nuevaPosicion, fuerza);
     add(dinamita);
+
+    FlameAudio.play('assets/audio/lanzamiento.mp3');
   }
 }

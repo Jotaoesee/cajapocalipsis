@@ -3,11 +3,10 @@ import 'package:cajapocalipsis/componentes/explosion.dart';
 import 'package:flame/components.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:cajapocalipsis/componentes/dinamita.dart';
-import 'package:flame_forge2d/forge2d_game.dart';
+import 'package:cajapocalipsis/cajapocalipsis.dart';
 
-// Usamos HasGameRef<Forge2DGame> para poder acceder a gameRef
-class Caja extends BodyComponent
-    with ContactCallbacks, HasGameRef<Forge2DGame> {
+class Caja extends BodyComponent<Cajapocalipsis>
+    with ContactCallbacks, HasGameRef<Cajapocalipsis> {
   final Vector2 tamanio;
   final Vector2 posicion;
 
@@ -31,36 +30,37 @@ class Caja extends BodyComponent
 
   @override
   Body createBody() {
-    final bodyDef = BodyDef(
+    final definicionCuerpo = BodyDef(
       position: posicion,
       type: BodyType.dynamic,
     );
-    final body = world.createBody(bodyDef);
-    body.userData = this; // Aseguramos que el cuerpo tenga su userData asignado
-
+    final cuerpo = world.createBody(definicionCuerpo);
+    cuerpo.userData = this; // Importante para detectar colisiones
     final shape = PolygonShape()..setAsBoxXY(tamanio.x / 2, tamanio.y / 2);
-    final fixtureDef = FixtureDef(shape)
+    final definicionFixture = FixtureDef(shape)
       ..density = 1.0
       ..friction = 0.5
       ..restitution = 0.2;
-    body.createFixture(fixtureDef);
-    return body;
+    cuerpo.createFixture(definicionFixture);
+    return cuerpo;
   }
 
   @override
-  void beginContact(Object other, Contact contact) {
-    super.beginContact(other, contact);
-    if (other is Dinamita) {
+  void beginContact(Object otro, Contact contact) {
+    super.beginContact(otro, contact);
+    if (otro is Dinamita) {
       print("¡Colisión detectada entre Caja y Dinamita!");
-      final explosionPos = body.position;
+      // Incrementa la puntuación en la clase principal
+      gameRef.puntuacion++;
+      final posicionExplosion = body.position;
       final explosion = Explosion(
-        posicion: explosionPos,
-        tamanio: Vector2.all(50),
+        posicion: posicionExplosion,
+        tamanio: Vector2.all(50), // Tamaño reducido para la explosión
       )..priority = 100;
       gameRef.add(explosion);
 
       removeFromParent();
-      other.removeFromParent();
+      otro.removeFromParent();
     }
   }
 }
