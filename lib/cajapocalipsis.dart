@@ -10,7 +10,6 @@ import 'componentes/caja.dart';
 
 /// Clase principal del juego
 class Cajapocalipsis extends Forge2DGame with TapDetector {
-  // Constructor del juego (no se puede cambiar el nombre del parámetro 'gravity' ya que es parte de la API)
   Cajapocalipsis() : super(gravity: Vector2(0, 10));
 
   final Random aleatorio = Random();
@@ -25,7 +24,7 @@ class Cajapocalipsis extends Forge2DGame with TapDetector {
 
     // Agregar el suelo
     final suelo = Suelo(Vector2(size.x, 10));
-    await add(suelo); // 🔥 Asegurarse de que se añada correctamente
+    await add(suelo);
 
     // Generar cajas en posiciones aleatorias
     for (int i = 0; i < 5; i++) {
@@ -55,7 +54,7 @@ class Cajapocalipsis extends Forge2DGame with TapDetector {
     }
 
     // Aplicar un impulso (fuerza) mayor en la dirección calculada
-    final Vector2 fuerza = direccion * 80000; // Ajuste de fuerza
+    final Vector2 fuerza = direccion * 800000;
 
     // Definir un desplazamiento relativo para la posición de aparición del dinamita
     final Vector2 desplazamiento = Vector2(100, -120);
@@ -66,6 +65,5 @@ class Cajapocalipsis extends Forge2DGame with TapDetector {
     // Crear dinamita en la nueva posición y lanzarla
     final dinamita = Dinamita(nuevaPosicion, fuerza);
     add(dinamita);
-    FlameAudio.play('lanzamiento.mp3');
   }
 }

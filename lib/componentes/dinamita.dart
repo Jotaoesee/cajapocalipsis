@@ -40,37 +40,27 @@ class Dinamita extends BodyComponent {
 
   @override
   Body createBody() {
-    // Definir el cuerpo de física con la posición ajustada
     final bodyDef = BodyDef(
       position: posicion,
       type: BodyType.dynamic,
-      linearDamping: 0.1,
+      linearDamping: 0.0,
       angularDamping: 0.5,
     );
-
     _body = world.createBody(bodyDef);
+    _body.userData =
+        this; // Asigna userData para que se detecten las colisiones
 
-    // Definir una forma rectangular más estrecha para el cuerpo de física
     final shape = PolygonShape()..setAsBoxXY(bodySize.x / 2, bodySize.y / 2);
-
     final fixtureDef = FixtureDef(shape)
       ..density = 2.0
       ..friction = 0.3
       ..restitution = 0.1
-      ..filter.maskBits = 0xFFFF ^ 0x0002;
-
+      ..filter.maskBits = 0xFFFF;
     _body.createFixture(fixtureDef);
 
-    // Aplicar impulso después de una breve demora
-    Future.delayed(Duration(milliseconds: 100), () {
-      if (_body != null) {
-        final Vector2 impulso = _fuerzaInicial * _body.mass;
-        print("💥 Lanzando dinamita con fuerza: $impulso");
-        _body.applyLinearImpulse(impulso);
-      } else {
-        print("❌ Error: El cuerpo de la dinamita aún no está listo");
-      }
-    });
+    final Vector2 impulso = _fuerzaInicial;
+    print("💥 Lanzando dinamita con fuerza: $impulso");
+    _body.applyLinearImpulse(impulso);
 
     return _body;
   }
