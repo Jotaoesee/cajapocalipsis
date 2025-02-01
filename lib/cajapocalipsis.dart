@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:cajapocalipsis/overlays/contador_tiempo.dart';
+import 'package:cajapocalipsis/overlays/texto_puntuacion.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flame/events.dart';
 import 'package:flame_audio/flame_audio.dart';
@@ -30,7 +31,7 @@ class Cajapocalipsis extends Forge2DGame with TapDetector {
     await add(suelo);
 
     // Generar cajas en posiciones aleatorias
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 1; i++) {
       final double x = aleatorio.nextDouble() * (size.x - 10) + 5;
       final double y = aleatorio.nextDouble() * (size.y / 3);
       Caja caja = Caja(Vector2(x, y), Vector2(100, 100));
@@ -45,6 +46,9 @@ class Cajapocalipsis extends Forge2DGame with TapDetector {
     // Agregar el contador de tiempo en la esquina superior derecha
     contadorTiempo = ContadorTiempo();
     add(contadorTiempo);
+
+    // **Agregar el texto de puntuación en la esquina superior izquierda**
+    add(TextoPuntuacion());
   }
 
   @override
@@ -66,8 +70,8 @@ class Cajapocalipsis extends Forge2DGame with TapDetector {
     juegoTerminado = true;
     print("Juego terminado: $mensaje");
 
-    // Aquí puedes pausar el juego o mostrar un overlay de "Fin del juego"
-    overlays.add('MenuOverlay'); // Puedes hacer un overlay de "Juego Terminado"
+    // Mostrar el overlay de fin del juego
+    overlays.add('PuntuacionFinalOverlay');
   }
 
   @override

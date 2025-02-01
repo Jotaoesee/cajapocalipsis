@@ -1,4 +1,5 @@
 import 'package:cajapocalipsis/overlays/menu_overlay.dart';
+import 'package:cajapocalipsis/overlays/puntuacion_final_overlay.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:cajapocalipsis/cajapocalipsis.dart'; // Asegúrate de que la ruta es correcta
@@ -8,12 +9,12 @@ void main() {
   runApp(
     GameWidget(
       game: juego,
-      // Se activa el overlay de inicio al arrancar el juego
       initialActiveOverlays: const ['MenuOverlay'],
       overlayBuilderMap: {
-        'MenuOverlay': (BuildContext context, Cajapocalipsis juego) {
-          return MenuOverlay(juego: juego);
-        },
+        'MenuOverlay': (context, game) =>
+            MenuOverlay(juego: game as Cajapocalipsis),
+        'PuntuacionFinalOverlay': (context, game) =>
+            PuntuacionFinalOverlay(juego: game as Cajapocalipsis),
       },
     ),
   );
