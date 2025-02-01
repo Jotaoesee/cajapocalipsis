@@ -43,6 +43,9 @@ class Cajapocalipsis extends Forge2DGame with TapDetector {
 
   @override
   void onTapDown(TapDownInfo info) {
+    // Reproducir el efecto de sonido del lanzador al disparar
+    FlameAudio.play('disparo_lanzador.mp3');
+
     // Iniciar la música de fondo en el primer toque del usuario (requerido en navegadores)
     if (!_musicaIniciada) {
       FlameAudio.bgm.initialize();
@@ -72,5 +75,6 @@ class Cajapocalipsis extends Forge2DGame with TapDetector {
     // Crear dinamita en la nueva posición y lanzarla
     final dinamita = Dinamita(nuevaPosicion, fuerza);
     add(dinamita);
+    FlameAudio.play('lanzamiento.mp3');
   }
 }

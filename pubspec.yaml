@@ -60,6 +60,8 @@ flutter:
   assets:
     - assets/images/
     - assets/audio/musica_fondo.mp3
+    - assets/audio/disparo_lanzador.mp3
+
 
 
 
