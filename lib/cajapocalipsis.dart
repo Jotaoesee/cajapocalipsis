@@ -15,7 +15,6 @@ class Cajapocalipsis extends Forge2DGame with TapDetector {
 
   final Random aleatorio = Random();
   late Lanzador lanzador;
-  bool _musicaIniciada = false; // Controla si la música ya ha sido iniciada
 
   @override
   Future<void> onLoad() async {
@@ -45,14 +44,6 @@ class Cajapocalipsis extends Forge2DGame with TapDetector {
   void onTapDown(TapDownInfo info) {
     // Reproducir el efecto de sonido del lanzador al disparar
     FlameAudio.play('disparo_lanzador.mp3');
-
-    // Iniciar la música de fondo en el primer toque del usuario (requerido en navegadores)
-    if (!_musicaIniciada) {
-      FlameAudio.bgm.initialize();
-      FlameAudio.bgm.play('musica_fondo.mp3', volume: 0.5);
-      print("🎵 Música de fondo iniciada");
-      _musicaIniciada = true;
-    }
 
     final Vector2 puntoObjetivo = info.eventPosition.global;
     print("🎯 Click detectado en: $puntoObjetivo");

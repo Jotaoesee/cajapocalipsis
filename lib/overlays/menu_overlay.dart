@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cajapocalipsis/cajapocalipsis.dart'; // Asegúrate de que la ruta es correcta
+import 'package:flame_audio/flame_audio.dart';
 
 class MenuOverlay extends StatelessWidget {
   final Cajapocalipsis juego;
@@ -9,7 +10,7 @@ class MenuOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      // El contenedor principal con la imagen de fondo
+      // Contenedor principal con la imagen de fondo
       child: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -17,7 +18,7 @@ class MenuOverlay extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        // Una capa adicional con un color oscuro semitransparente para mejorar la legibilidad
+        // Capa semitransparente para mejorar la legibilidad
         child: Container(
           decoration: BoxDecoration(
             color: Colors.black.withOpacity(0.6),
@@ -50,14 +51,18 @@ class MenuOverlay extends StatelessWidget {
                   SizedBox(height: 40),
                   ElevatedButton(
                     onPressed: () {
-                      // Al pulsar el botón se remueve el overlay y se inicia el juego
+                      // Iniciar la música de fondo en el momento en que se presione el botón.
+                      FlameAudio.bgm.initialize();
+                      FlameAudio.bgm.play('musica_fondo.mp3', volume: 0.5);
+                      print("🎵 Música de fondo iniciada");
+
+                      // Quitar el overlay para iniciar el juego.
                       juego.overlays.remove('MenuOverlay');
                     },
                     child: Text('Iniciar Juego'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
                       foregroundColor: Colors.white,
-                      // Color del botón
                       padding:
                           EdgeInsets.symmetric(horizontal: 40, vertical: 20),
                       textStyle: TextStyle(
