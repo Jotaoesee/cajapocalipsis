@@ -1,6 +1,5 @@
 import 'dart:math';
 import 'package:cajapocalipsis/overlays/contador_tiempo.dart';
-import 'package:cajapocalipsis/overlays/texto_puntuacion.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flame/events.dart';
 import 'package:flame_audio/flame_audio.dart';
@@ -16,7 +15,10 @@ class Cajapocalipsis extends Forge2DGame with TapDetector {
 
   final Random aleatorio = Random();
   late Lanzador lanzador;
-  int puntuacion = 0; // Puntuación inicial
+  int puntuacion = 0; // Contador de cajas destruidas
+  bool juegoTerminado = false; // Bandera para indicar si el juego ha terminado
+  late ContadorTiempo contadorTiempo;
+  List<Caja> listaCajas = []; // Lista de cajas generadas
 
   @override
   Future<void> onLoad() async {
@@ -27,10 +29,13 @@ class Cajapocalipsis extends Forge2DGame with TapDetector {
     final suelo = Suelo(Vector2(size.x, 10));
     await add(suelo);
 
+    // Generar cajas en posiciones aleatorias
     for (int i = 0; i < 10; i++) {
       final double x = aleatorio.nextDouble() * (size.x - 10) + 5;
       final double y = aleatorio.nextDouble() * (size.y / 3);
-      add(Caja(Vector2(x, y), Vector2(100, 100)));
+      Caja caja = Caja(Vector2(x, y), Vector2(100, 100));
+      listaCajas.add(caja);
+      add(caja);
     }
 
     final posicionLanzador = Vector2(size.x / 2, size.y - 100);
@@ -38,15 +43,38 @@ class Cajapocalipsis extends Forge2DGame with TapDetector {
     add(lanzador);
 
     // Agregar el contador de tiempo en la esquina superior derecha
-    add(ContadorTiempo());
+    contadorTiempo = ContadorTiempo();
+    add(contadorTiempo);
+  }
 
-    add(TextoPuntuacion());
+  @override
+  void update(double dt) {
+    super.update(dt);
+    if (!juegoTerminado) {
+      // Si la puntuación alcanza la cantidad de cajas generadas, el juego termina
+      if (puntuacion >= listaCajas.length) {
+        terminarJuego("¡Has destruido todas las cajas!");
+      }
+      // Si el tiempo llega a 0, el juego termina
+      if (contadorTiempo.tiempoRestante <= 0) {
+        terminarJuego("¡Tiempo agotado!");
+      }
+    }
+  }
+
+  void terminarJuego(String mensaje) {
+    juegoTerminado = true;
+    print("Juego terminado: $mensaje");
+
+    // Aquí puedes pausar el juego o mostrar un overlay de "Fin del juego"
+    overlays.add('MenuOverlay'); // Puedes hacer un overlay de "Juego Terminado"
   }
 
   @override
   void onTapDown(TapDownInfo info) {
-    FlameAudio.play('assets/audio/disparo_lanzador.mp3');
+    if (juegoTerminado) return; // Si el juego ha terminado, no hacer nada
 
+    FlameAudio.play('disparo_lanzador.mp3');
     final Vector2 puntoObjetivo = info.eventPosition.global;
     print("🎯 Click detectado en: $puntoObjetivo");
 
@@ -60,7 +88,6 @@ class Cajapocalipsis extends Forge2DGame with TapDetector {
     final Vector2 nuevaPosicion = lanzador.position + desplazamiento;
     final dinamita = Dinamita(nuevaPosicion, fuerza);
     add(dinamita);
-
-    FlameAudio.play('assets/audio/lanzamiento.mp3');
+    FlameAudio.play('lanzamiento.mp3');
   }
 }

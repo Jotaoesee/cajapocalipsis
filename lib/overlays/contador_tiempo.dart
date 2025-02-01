@@ -13,7 +13,6 @@ class ContadorTiempo extends TextComponent with HasGameRef<Cajapocalipsis> {
 
   @override
   Future<void> onLoad() async {
-    // Configura el estilo del texto
     textRenderer = TextPaint(
       style: const TextStyle(fontSize: 24, color: Colors.white),
     );
@@ -29,7 +28,6 @@ class ContadorTiempo extends TextComponent with HasGameRef<Cajapocalipsis> {
       if (tiempoRestante < 0) {
         tiempoRestante = 0;
       }
-      // Actualiza el texto para mostrar el tiempo restante redondeado a entero
       text = "Tiempo: ${tiempoRestante.toStringAsFixed(0)}";
     }
   }

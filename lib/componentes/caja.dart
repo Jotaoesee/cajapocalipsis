@@ -35,7 +35,8 @@ class Caja extends BodyComponent<Cajapocalipsis>
       type: BodyType.dynamic,
     );
     final cuerpo = world.createBody(definicionCuerpo);
-    cuerpo.userData = this; // Importante para detectar colisiones
+    cuerpo.userData = this;
+
     final shape = PolygonShape()..setAsBoxXY(tamanio.x / 2, tamanio.y / 2);
     final definicionFixture = FixtureDef(shape)
       ..density = 1.0
@@ -49,13 +50,15 @@ class Caja extends BodyComponent<Cajapocalipsis>
   void beginContact(Object otro, Contact contact) {
     super.beginContact(otro, contact);
     if (otro is Dinamita) {
-      print("¡Colisión detectada entre Caja y Dinamita!");
+      print("💥 ¡Colisión detectada entre Caja y Dinamita!");
+
       // Incrementa la puntuación en la clase principal
       gameRef.puntuacion++;
+
       final posicionExplosion = body.position;
       final explosion = Explosion(
         posicion: posicionExplosion,
-        tamanio: Vector2.all(50), // Tamaño reducido para la explosión
+        tamanio: Vector2.all(50),
       )..priority = 100;
       gameRef.add(explosion);
 
