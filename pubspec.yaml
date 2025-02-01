@@ -32,6 +32,7 @@ dependencies:
     sdk: flutter
   flame: ^1.23.0
   flame_forge2d: ^0.16.0
+  flame_audio: ^1.0.0
 
 
 dev_dependencies:
@@ -58,6 +59,7 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/audio/musica_fondo.mp3
 
 
 
